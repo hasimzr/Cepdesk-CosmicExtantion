@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 license = "MIT"
 description = "CepDesk service management applet for COSMIC"
+homepage = "https://cepdesk.hasimozer.com"
+repository = "https://github.com/hasimzr/Cepdesk-CosmicExtantion"
 
 [dependencies]
 cosmic = { package = "libcosmic", git = "https://github.com/pop-os/libcosmic.git", rev = "dbc62f2d899cdbfbe43d170689ddc0290db663f4", default-features = false, features = ["applet", "tokio"] }

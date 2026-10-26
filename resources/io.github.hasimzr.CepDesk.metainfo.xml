@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>dev.cepdesk.Applet</id>
+  <id>io.github.hasimzr.CepDesk</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <name>CepDesk</name>
-  <developer id="dev.cepdesk"><name>Haşim Özer</name></developer>
+  <developer id="io.github.hasimzr"><name>Haşim Özer</name></developer>
   <summary>Manage phone connections and your desktop service</summary>
   <summary xml:lang="tr">Telefon bağlantılarını ve bilgisayar servisini yönet</summary>
   <description>
@@ -19,9 +19,11 @@
     </ul>
   </description>
   <url type="homepage">https://cepdesk.hasimozer.com</url>
+  <url type="vcs-browser">https://github.com/hasimzr/Cepdesk-CosmicExtantion</url>
+  <url type="bugtracker">https://github.com/hasimzr/Cepdesk-CosmicExtantion/issues</url>
   <url type="contact">https://github.com/hasimzr</url>
-  <launchable type="desktop-id">dev.cepdesk.Applet.Manager.desktop</launchable>
-  <icon type="stock">dev.cepdesk.Applet</icon>
+  <launchable type="desktop-id">io.github.hasimzr.CepDesk.Manager.desktop</launchable>
+  <icon type="stock">io.github.hasimzr.CepDesk</icon>
   <provides><id>com.system76.CosmicApplet</id><binary>cepdesk-applet</binary></provides>
   <categories><category>Utility</category></categories>
   <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>

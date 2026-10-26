@@ -65,7 +65,7 @@ pub async fn snapshot() -> Result<Value, String> {
 }
 pub async fn startup_snapshot() -> Result<Value, String> {
     // Run once at launch, never during polling: Stop must stay stopped.
-    if std::env::var("FLATPAK_ID").as_deref() == Ok("dev.cepdesk.Applet") {
+    if std::env::var("FLATPAK_ID").as_deref() == Ok("io.github.hasimzr.CepDesk") {
         let output = tokio::time::timeout(
             Duration::from_secs(30),
             tokio::process::Command::new("/app/libexec/cepdesk-flatpak-setup").output(),

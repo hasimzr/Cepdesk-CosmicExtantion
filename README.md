@@ -97,4 +97,3 @@ For touchpad/keyboard support, the user must run `sudo ./scripts/setup-input.sh`
 ## Publishing to GitHub
 
 Place the **contents** of this directory at the repository root: `Cargo.toml`, `service/`, `scripts/`, `resources/`, `README.md`, `LICENSE`, and `.gitignore` should appear at the root. `.gitignore` excludes build outputs, local tools, and common key/test files; review `git status --short` and staged changes before running `git add`. Do not copy passwords, certificate private keys, or device state into the source directory. Upload packages to GitHub Releases. The store manifest builds from this standalone repository layout.
-# Depdesk-CosmicExtantion

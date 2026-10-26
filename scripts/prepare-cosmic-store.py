@@ -24,25 +24,25 @@ if not args.service_cargo_sources.is_file():
     parser.error('Generate service-cargo-sources.json from service/Cargo.lock first.')
 json.loads(args.cargo_sources.read_text())
 json.loads(args.service_cargo_sources.read_text())
-output = root / 'release/store-submission/app/dev.cepdesk.Applet'
+output = root / 'release/store-submission/app/io.github.hasimzr.CepDesk'
 output.mkdir(parents=True, exist_ok=True)
-manifest = json.loads((root / 'packaging/flatpak/dev.cepdesk.Applet.json.in').read_text())
+manifest = json.loads((root / 'packaging/flatpak/io.github.hasimzr.CepDesk.json.in').read_text())
 for module in manifest['modules']:
     source = module['sources'][0]
     source['url'] = args.repository
     source['commit'] = args.commit.lower()
-(output / 'dev.cepdesk.Applet.json').write_text(json.dumps(manifest, indent=2) + '\n')
+(output / 'io.github.hasimzr.CepDesk.json').write_text(json.dumps(manifest, indent=2) + '\n')
 shutil.copy2(args.cargo_sources, output / 'cargo-sources.json')
 shutil.copy2(args.service_cargo_sources, output / 'service-cargo-sources.json')
 # Metadata belongs upstream, not in the COSMIC submission. This prepared sibling
 # is reviewed before replacing upstream metadata and creating the final release.
-metadata = ET.parse(root / 'resources/dev.cepdesk.Applet.metainfo.xml')
+metadata = ET.parse(root / 'resources/io.github.hasimzr.CepDesk.metainfo.xml')
 component = metadata.getroot()
 # Preserve the product homepage and update the source URL without duplicates.
 for existing in list(component.findall("url[@type='vcs-browser']")):
     component.remove(existing)
 ET.SubElement(component, 'url', {'type': 'vcs-browser'}).text = args.repository.removesuffix('.git')
 ET.indent(metadata, space='  ')
-metadata.write(root / 'release/dev.cepdesk.Applet.metainfo.xml', encoding='UTF-8', xml_declaration=True)
+metadata.write(root / 'release/io.github.hasimzr.CepDesk.metainfo.xml', encoding='UTF-8', xml_declaration=True)
 print(output)
 print('Before submission: commit public metadata/screenshots upstream, regenerate with that final commit, run flatpak-builder and validate AppStream. No files have been published.')

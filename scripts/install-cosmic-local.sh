@@ -8,13 +8,13 @@ install -Dm755 service/target/release/cepdesk "$HOME/.local/bin/cepdesk"
 install -Dm644 service/cepdesk.service "$HOME/.config/systemd/user/cepdesk.service"
 desktop_stage="$(mktemp -d "${TMPDIR:-/tmp}/cepdesk-desktop.XXXXXX")"
 trap 'rm -rf -- "$desktop_stage"' EXIT
-for file in dev.cepdesk.Applet.desktop dev.cepdesk.Applet.Manager.desktop; do
+for file in io.github.hasimzr.CepDesk.desktop io.github.hasimzr.CepDesk.Manager.desktop; do
   # Absolute path works even when the session has not refreshed ~/.local/bin in PATH.
   sed "s|Exec=cepdesk-applet|Exec=$HOME/.local/bin/cepdesk-applet|" "resources/$file" > "$desktop_stage/$file"
   install -Dm644 "$desktop_stage/$file" "$HOME/.local/share/applications/$file"
 done
-install -Dm644 resources/dev.cepdesk.Applet.png "$HOME/.local/share/icons/hicolor/512x512/apps/dev.cepdesk.Applet.png"
-install -Dm644 resources/dev.cepdesk.Applet.metainfo.xml "$HOME/.local/share/metainfo/dev.cepdesk.Applet.metainfo.xml"
+install -Dm644 resources/io.github.hasimzr.CepDesk.png "$HOME/.local/share/icons/hicolor/512x512/apps/io.github.hasimzr.CepDesk.png"
+install -Dm644 resources/io.github.hasimzr.CepDesk.metainfo.xml "$HOME/.local/share/metainfo/io.github.hasimzr.CepDesk.metainfo.xml"
 systemctl --user daemon-reload
 systemctl --user enable --now cepdesk.service
 systemctl --user restart cepdesk.service

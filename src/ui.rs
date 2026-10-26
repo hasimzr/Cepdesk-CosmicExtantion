@@ -74,7 +74,7 @@ impl cosmic::Application for Manager {
     type Executor = cosmic::executor::Default;
     type Flags = bool;
     type Message = Message;
-    const APP_ID: &'static str = "dev.cepdesk.Applet";
+    const APP_ID: &'static str = "io.github.hasimzr.CepDesk";
     fn core(&self) -> &cosmic::Core {
         &self.core
     }
@@ -110,7 +110,7 @@ impl cosmic::Application for Manager {
             answer: String::new(),
             confirmation: None,
             icon: widget::icon::from_raster_bytes(
-                include_bytes!("../resources/dev.cepdesk.Applet.png").as_slice(),
+                include_bytes!("../resources/io.github.hasimzr.CepDesk.png").as_slice(),
             ),
         };
         (
@@ -789,7 +789,7 @@ impl cosmic::Application for DesktopManager {
     type Executor = cosmic::executor::Default;
     type Flags = ();
     type Message = Message;
-    const APP_ID: &'static str = "dev.cepdesk.Applet.Manager";
+    const APP_ID: &'static str = "io.github.hasimzr.CepDesk.Manager";
     fn core(&self) -> &cosmic::Core {
         &self.0.core
     }

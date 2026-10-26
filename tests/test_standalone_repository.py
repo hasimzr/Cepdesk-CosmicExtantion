@@ -59,7 +59,7 @@ binary.chmod(0o755)
                 result = subprocess.run(['git', '-C', str(checkout), 'check-ignore', '--no-index', '-q', name])
                 self.assertEqual(result.returncode, 0, name)
             for name in ['Cargo.lock', 'service/Cargo.lock', 'LICENSE', 'README.md',
-                         'src/main.rs', 'service/src/main.rs', 'resources/dev.cepdesk.Applet.png']:
+                         'src/main.rs', 'service/src/main.rs', 'resources/io.github.hasimzr.CepDesk.png']:
                 result = subprocess.run(['git', '-C', str(checkout), 'check-ignore', '--no-index', '-q', name])
                 self.assertEqual(result.returncode, 1, name)
 

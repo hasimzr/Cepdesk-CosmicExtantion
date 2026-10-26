@@ -46,6 +46,12 @@ esac
             self.assertIn('enable cepdesk.service', calls)
             self.assertEqual(unit.stat().st_mode & 0o777, 0o600)
             self.assertEqual(run(), '')  # Existing disabled unit stays disabled.
+            unit.write_text(unit.read_text().replace('io.github.hasimzr.CepDesk', 'dev.cepdesk.Applet'))
+            calls = run()
+            self.assertIn('daemon-reload', calls)
+            self.assertNotIn('enable cepdesk.service', calls)
+            self.assertIn('--command=cepdesk-host-launch io.github.hasimzr.CepDesk', unit.read_text())
+            self.assertEqual(run(), '')
             unit.write_text('[Service]\nExecStart=/usr/bin/cepdesk serve\n')
             self.assertEqual(run(), '')
             self.assertIn('/usr/bin/cepdesk', unit.read_text())
@@ -62,8 +68,8 @@ esac
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             for relative in ['scripts/prepare-cosmic-store.py',
-                             'packaging/flatpak/dev.cepdesk.Applet.json.in',
-                             'resources/dev.cepdesk.Applet.metainfo.xml']:
+                             'packaging/flatpak/io.github.hasimzr.CepDesk.json.in',
+                             'resources/io.github.hasimzr.CepDesk.metainfo.xml']:
                 destination = root / relative
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / relative, destination)
@@ -75,8 +81,8 @@ esac
                             '--cargo-sources', str(root / 'cargo-sources.json'),
                             '--service-cargo-sources', str(root / 'service-cargo-sources.json')],
                            check=True, capture_output=True)
-            output = root / 'release/store-submission/app/dev.cepdesk.Applet'
-            manifest = json.loads((output / 'dev.cepdesk.Applet.json').read_text())
+            output = root / 'release/store-submission/app/io.github.hasimzr.CepDesk'
+            manifest = json.loads((output / 'io.github.hasimzr.CepDesk.json').read_text())
             self.assertEqual([m['name'] for m in manifest['modules']],
                              ['cepdesk-service', 'cepdesk-applet'])
             for module in manifest['modules']:
@@ -85,7 +91,7 @@ esac
             self.assertIn('--talk-name=org.freedesktop.Flatpak', manifest['finish-args'])
             self.assertTrue((output / 'service-cargo-sources.json').is_file())
             self.assertIn('service/Cargo.toml', manifest['modules'][0]['build-commands'][0])
-            metadata = ET.parse(root / 'release/dev.cepdesk.Applet.metainfo.xml').getroot()
+            metadata = ET.parse(root / 'release/io.github.hasimzr.CepDesk.metainfo.xml').getroot()
             homepages = metadata.findall("url[@type='homepage']")
             self.assertEqual(len(homepages), 1)
             self.assertEqual(homepages[0].text, 'https://cepdesk.hasimozer.com')
@@ -93,7 +99,7 @@ esac
                              'https://example.invalid/CepDesk')
             if shutil.which('appstreamcli'):
                 subprocess.run(['appstreamcli', 'validate', '--no-net',
-                                str(root / 'release/dev.cepdesk.Applet.metainfo.xml')],
+                                str(root / 'release/io.github.hasimzr.CepDesk.metainfo.xml')],
                                check=True, capture_output=True)
 
 

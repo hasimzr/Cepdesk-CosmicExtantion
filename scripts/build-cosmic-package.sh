@@ -16,11 +16,11 @@ install -Dm755 target/release/cepdesk-applet "$stage/usr/bin/cepdesk-applet"
 install -Dm644 packaging/debian/cepdesk.service "$stage/usr/lib/systemd/user/cepdesk.service"
 mkdir -p "$stage/etc/systemd/user/graphical-session.target.wants"
 ln -s /usr/lib/systemd/user/cepdesk.service "$stage/etc/systemd/user/graphical-session.target.wants/cepdesk.service"
-for file in dev.cepdesk.Applet.desktop dev.cepdesk.Applet.Manager.desktop; do
+for file in io.github.hasimzr.CepDesk.desktop io.github.hasimzr.CepDesk.Manager.desktop; do
   install -Dm644 "resources/$file" "$stage/usr/share/applications/$file"
 done
-install -Dm644 resources/dev.cepdesk.Applet.metainfo.xml "$stage/usr/share/metainfo/dev.cepdesk.Applet.metainfo.xml"
-install -Dm644 resources/dev.cepdesk.Applet.png "$stage/usr/share/icons/hicolor/512x512/apps/dev.cepdesk.Applet.png"
+install -Dm644 resources/io.github.hasimzr.CepDesk.metainfo.xml "$stage/usr/share/metainfo/io.github.hasimzr.CepDesk.metainfo.xml"
+install -Dm644 resources/io.github.hasimzr.CepDesk.png "$stage/usr/share/icons/hicolor/512x512/apps/io.github.hasimzr.CepDesk.png"
 install -Dm644 LICENSE "$stage/usr/share/doc/cepdesk/copyright"
 mkdir -p "$stage/DEBIAN"
 for script in postinst prerm postrm; do

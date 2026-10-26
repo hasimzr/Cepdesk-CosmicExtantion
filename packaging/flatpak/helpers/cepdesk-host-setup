@@ -6,6 +6,15 @@ marker='# CepDesk Flatpak managed unit v1'
 # Preserve native installations and custom units, including user masks.
 if [ -e "$unit" ] || [ -L "$unit" ]; then
     grep -qxF "$marker" "$unit" 2>/dev/null || exit 0
+    # Migrate our pre-store ID without enabling a service the user disabled.
+    if grep -qxF 'ExecStart=/usr/bin/flatpak run --command=cepdesk-host-launch dev.cepdesk.Applet' "$unit"; then
+        umask 077
+        tmp=$(mktemp "$unit_dir/.cepdesk.service.XXXXXX")
+        trap 'rm -f -- "$tmp"' EXIT
+        sed 's/dev\.cepdesk\.Applet/io.github.hasimzr.CepDesk/g' "$unit" > "$tmp"
+        mv -- "$tmp" "$unit"
+        systemctl --user daemon-reload
+    fi
 else
     existing=$(systemctl --user show cepdesk.service --property=FragmentPath --value 2>/dev/null || true)
     [ -z "$existing" ] || exit 0
@@ -22,8 +31,8 @@ PartOf=graphical-session.target
 
 [Service]
 Type=simple
-ExecCondition=/usr/bin/flatpak info dev.cepdesk.Applet
-ExecStart=/usr/bin/flatpak run --command=cepdesk-host-launch dev.cepdesk.Applet
+ExecCondition=/usr/bin/flatpak info io.github.hasimzr.CepDesk
+ExecStart=/usr/bin/flatpak run --command=cepdesk-host-launch io.github.hasimzr.CepDesk
 WorkingDirectory=%h
 Restart=on-failure
 RestartSec=3
