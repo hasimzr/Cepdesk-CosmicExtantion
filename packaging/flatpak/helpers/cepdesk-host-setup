@@ -1,0 +1,42 @@
+#!/bin/sh
+set -eu
+unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+unit="$unit_dir/cepdesk.service"
+marker='# CepDesk Flatpak managed unit v1'
+# Preserve native installations and custom units, including user masks.
+if [ -e "$unit" ] || [ -L "$unit" ]; then
+    grep -qxF "$marker" "$unit" 2>/dev/null || exit 0
+else
+    existing=$(systemctl --user show cepdesk.service --property=FragmentPath --value 2>/dev/null || true)
+    [ -z "$existing" ] || exit 0
+    umask 077
+    mkdir -p "$unit_dir"
+    tmp=$(mktemp "$unit_dir/.cepdesk.service.XXXXXX")
+    trap 'rm -f -- "$tmp"' EXIT
+    cat > "$tmp" <<'UNIT'
+# CepDesk Flatpak managed unit v1
+[Unit]
+Description=CepDesk bundled COSMIC Flatpak desktop service
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecCondition=/usr/bin/flatpak info dev.cepdesk.Applet
+ExecStart=/usr/bin/flatpak run --command=cepdesk-host-launch dev.cepdesk.Applet
+WorkingDirectory=%h
+Restart=on-failure
+RestartSec=3
+UMask=0077
+KillMode=control-group
+TimeoutStopSec=5
+
+[Install]
+WantedBy=graphical-session.target
+UNIT
+    mv -- "$tmp" "$unit"
+    systemctl --user daemon-reload
+    systemctl --user enable cepdesk.service
+fi
+# Do not enable an existing unit again: the user may have disabled it.
+# The applet's normal startup path starts enabled services through D-Bus.

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+app_path=$(sed -n 's/^app-path=//p' /.flatpak-info)
+case "$app_path" in /*) ;; *) echo 'Flatpak app-path bulunamadı.' >&2; exit 1;; esac
+bundle="$app_path/libexec/cepdesk-host"
+# The host uses the bundled loader/libs; LD_LIBRARY_PATH is never inherited by
+# user commands (which must continue using the host's own libraries).
+exec flatpak-spawn --host --watch-bus /bin/sh -s -- "$bundle" "${WAYLAND_DISPLAY:-}" < /app/libexec/cepdesk-host-run

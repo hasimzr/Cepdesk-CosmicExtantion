@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+bundle=$1
+if [ -n "$2" ]; then export WAYLAND_DISPLAY=$2; fi
+unset WAYLAND_SOCKET LD_LIBRARY_PATH LD_PRELOAD
+loader="$bundle/lib/$(cat "$bundle/loader-name")"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/cepdesk"
+umask 077
+mkdir -p "$cache_dir"
+cache=$(mktemp "$cache_dir/flatpak-loaders.XXXXXX")
+trap 'rm -f -- "$cache"' EXIT
+"$loader" --library-path "$bundle/lib" "$bundle/bin/gdk-pixbuf-query-loaders" "$bundle"/loaders/*.so > "$cache"
+# A per-deployment cache avoids paths to old Flatpak revisions after an update.
+mv -- "$cache" "$cache_dir/flatpak-loaders.cache"
+export GDK_PIXBUF_MODULE_FILE="$cache_dir/flatpak-loaders.cache"
+export CEPDESK_BUNDLED_SERVICE=1
+exec "$loader" --library-path "$bundle/lib" "$bundle/bin/cepdesk" serve

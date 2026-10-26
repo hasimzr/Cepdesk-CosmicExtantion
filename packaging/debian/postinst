@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+[ "$1" = configure ] || exit 0
+# Only start in existing graphical sessions. The packaged wants symlink handles
+# future sessions; a user's mask takes precedence.
+for runtime in /run/user/[0-9]*; do
+    [ -S "$runtime/bus" ] || continue
+    uid=${runtime##*/}
+    user=$(getent passwd "$uid" | cut -d: -f1)
+    [ -n "$user" ] || continue
+    userctl() {
+        runuser -u "$user" -- env XDG_RUNTIME_DIR="$runtime" \
+            DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" systemctl --user "$@"
+    }
+    userctl daemon-reload || continue
+    userctl is-active --quiet graphical-session.target || continue
+    state=$(userctl is-enabled cepdesk.service 2>/dev/null) || continue
+    case "$state" in
+        enabled|enabled-runtime) userctl start cepdesk.service || true ;;
+    esac
+done
+exit 0

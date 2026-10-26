@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=CepDesk Management
+Name[tr]=CepDesk Yönetimi
+Comment=Manage devices, commands and the CepDesk service
+Comment[tr]=Cihazları, komutları ve CepDesk servisini yönet
+Type=Application
+Icon=dev.cepdesk.Applet
+Exec=cepdesk-applet --settings
+Terminal=false
+StartupNotify=true
+Categories=Utility;X-COSMIC;
+Keywords=CepDesk;Remote;Devices;COSMIC;

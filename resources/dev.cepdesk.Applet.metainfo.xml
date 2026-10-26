@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>dev.cepdesk.Applet</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>CepDesk</name>
+  <developer id="dev.cepdesk"><name>Haşim Özer</name></developer>
+  <summary>Manage phone connections and your desktop service</summary>
+  <summary xml:lang="tr">Telefon bağlantılarını ve bilgisayar servisini yönet</summary>
+  <description>
+    <p>CepDesk is a panel applet and management application for the COSMIC desktop. It controls the native CepDesk service that connects Android devices to your computer over the local network.</p>
+    <p>The Flatpak edition includes the desktop service and prepares it automatically on first launch. It runs on the host as your user to control desktop applications and commands, using the org.freedesktop.Flatpak permission. Set a pairing password and connect the Android app to begin. The interface supports Turkish and English, follows your device language automatically and offers a language selector in Settings.</p>
+    <ul>
+      <li>View authenticated devices, live connections and command permissions.</li>
+      <li>Disconnect or revoke devices and approve pairing requests.</li>
+      <li>Create, edit, run and delete saved commands; inspect and cancel jobs.</li>
+      <li>Configure pairing passwords and clipboard tracking.</li>
+      <li>Start, stop, restart and enable the user service.</li>
+    </ul>
+  </description>
+  <url type="homepage">https://cepdesk.hasimozer.com</url>
+  <url type="contact">https://github.com/hasimzr</url>
+  <launchable type="desktop-id">dev.cepdesk.Applet.Manager.desktop</launchable>
+  <icon type="stock">dev.cepdesk.Applet</icon>
+  <provides><id>com.system76.CosmicApplet</id><binary>cepdesk-applet</binary></provides>
+  <categories><category>Utility</category></categories>
+  <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
+  <content_rating type="oars-1.1" />
+  <releases><release version="0.1.0" date="2026-10-10" type="development" /></releases>
+</component>

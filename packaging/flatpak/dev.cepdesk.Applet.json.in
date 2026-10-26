@@ -1,0 +1,76 @@
+{
+  "id": "dev.cepdesk.Applet",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "26.08",
+  "sdk": "org.freedesktop.Sdk",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Extension.rust-stable"
+  ],
+  "base": "com.system76.Cosmic.BaseApp",
+  "base-version": "stable",
+  "command": "cepdesk-applet",
+  "finish-args": [
+    "--socket=wayland",
+    "--share=ipc",
+    "--device=dri",
+    "--filesystem=xdg-run/cepdesk",
+    "--filesystem=xdg-config/cosmic:ro",
+    "--talk-name=org.freedesktop.systemd1",
+    "--talk-name=com.system76.CosmicSettingsDaemon",
+    "--talk-name=org.freedesktop.Flatpak"
+  ],
+  "build-options": {
+    "append-path": "/usr/lib/sdk/rust-stable/bin",
+    "env": {
+      "CARGO_HOME": "/run/build/cepdesk-applet/cargo"
+    }
+  },
+  "modules": [
+    {
+      "name": "cepdesk-service",
+      "buildsystem": "simple",
+      "build-options": {
+        "env": {
+          "CARGO_HOME": "/run/build/cepdesk-service/cargo"
+        }
+      },
+      "build-commands": [
+        "cargo build --offline --locked --release --manifest-path service/Cargo.toml",
+        "python3 scripts/bundle-flatpak-service.py --binary service/target/release/cepdesk --output /app/libexec/cepdesk-host"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "@REPOSITORY@",
+          "commit": "@COMMIT@"
+        },
+        "service-cargo-sources.json"
+      ]
+    },
+    {
+      "name": "cepdesk-applet",
+      "buildsystem": "simple",
+      "build-commands": [
+        "cargo build --offline --locked --release --manifest-path Cargo.toml",
+        "install -Dm755 target/release/cepdesk-applet /app/bin/cepdesk-applet",
+        "install -Dm644 resources/dev.cepdesk.Applet.desktop /app/share/applications/dev.cepdesk.Applet.desktop",
+        "install -Dm644 resources/dev.cepdesk.Applet.Manager.desktop /app/share/applications/dev.cepdesk.Applet.Manager.desktop",
+        "install -Dm644 resources/dev.cepdesk.Applet.metainfo.xml /app/share/metainfo/dev.cepdesk.Applet.metainfo.xml",
+        "mkdir -p /app/share/icons/hicolor/512x512/apps",
+        "gdk-pixbuf-thumbnailer -s 512 resources/dev.cepdesk.Applet.png /app/share/icons/hicolor/512x512/apps/dev.cepdesk.Applet.png",
+        "install -Dm755 packaging/flatpak/helpers/cepdesk-flatpak-setup /app/libexec/cepdesk-flatpak-setup",
+        "install -Dm755 packaging/flatpak/helpers/cepdesk-host-setup /app/libexec/cepdesk-host-setup",
+        "install -Dm755 packaging/flatpak/helpers/cepdesk-host-run /app/libexec/cepdesk-host-run",
+        "install -Dm755 packaging/flatpak/helpers/cepdesk-host-launch /app/bin/cepdesk-host-launch"
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "@REPOSITORY@",
+          "commit": "@COMMIT@"
+        },
+        "cargo-sources.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+# Execute the bundled installer as the current host user, without downloads/sudo.
+exec flatpak-spawn --host --watch-bus /bin/sh -s < /app/libexec/cepdesk-host-setup

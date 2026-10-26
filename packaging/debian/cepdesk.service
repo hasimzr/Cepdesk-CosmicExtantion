@@ -1,0 +1,17 @@
+[Unit]
+Description=CepDesk local desktop service
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/cepdesk serve
+WorkingDirectory=%h
+Restart=on-failure
+RestartSec=3
+UMask=0077
+KillMode=control-group
+TimeoutStopSec=5
+
+[Install]
+WantedBy=graphical-session.target

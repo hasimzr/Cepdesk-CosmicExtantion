@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+[ "$1" = remove ] || [ "$1" = purge ] || exit 0
+for runtime in /run/user/[0-9]*; do
+    [ -S "$runtime/bus" ] || continue
+    uid=${runtime##*/}
+    user=$(getent passwd "$uid" | cut -d: -f1)
+    [ -n "$user" ] || continue
+    runuser -u "$user" -- env XDG_RUNTIME_DIR="$runtime" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=$runtime/bus" \
+        systemctl --user daemon-reload || true
+done
+exit 0
