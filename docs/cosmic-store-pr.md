@@ -20,7 +20,8 @@ Existing native/custom units, masks and startup preferences are preserved. Statu
 ## Validation
 
 - [ ] Final upstream commit, metadata and real screenshots are public.
-- [ ] `just build io.github.hasimzr.CepDesk` succeeds from the pinned source.
+- [x] Local source snapshot builds offline in the Freedesktop 25.08 SDK, completes AppStream composition and exports to a local Flatpak repository (x86_64).
+- [ ] Rebuild the final public commit using `just build io.github.hasimzr.CepDesk` in the COSMIC repository fork.
 - [x] AppStream metadata and both desktop entries validate.
 - [x] Native format/Clippy checks, 37 Rust tests and 4 Python packaging tests pass (3 COSMIC/session tests remain ignored in the automated suite).
 - [x] Isolated host-setup tests cover first launch, old-ID migration, disabled startup, native/custom units and masks.

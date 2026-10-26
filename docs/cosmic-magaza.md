@@ -33,7 +33,7 @@ Before uninstalling, stop the service and disable automatic startup in the manag
 ## Prepare and test
 
 1. Add real screenshots of the panel popup and management window under `resources/screenshots/`. Avoid passwords, device keys and private device/IP details. Add public HTTPS image URLs and captions to the upstream AppStream metadata. Commit and push these together with the packaging changes.
-2. Obtain [flatpak-cargo-generator.py](https://github.com/flatpak/flatpak-builder-tools/tree/master/cargo) from the official Flatpak tools repository. Install its declared Python dependencies in a virtual environment. Generate both source lists from the final lockfiles:
+2. Obtain [flatpak-cargo-generator.py](https://github.com/flatpak/flatpak-builder-tools/tree/master/cargo) from the official Flatpak tools repository. Use Python 3.11 or later and install the generator's declared dependencies in a virtual environment. Generate both source lists from the final lockfiles:
 
    ```sh
    mkdir -p release/store-sources
@@ -45,6 +45,8 @@ Before uninstalling, stop the service and disable automatic startup in the manag
      --cargo-sources release/store-sources/cargo-sources.json \
      --service-cargo-sources release/store-sources/service-cargo-sources.json
    ```
+
+   The preparation script preserves all Git source variants from each lockfile, including unqualified URLs used alongside an explicit revision of the same repository. This avoids missing-source failures in offline builds.
 
    The chosen commit must be public and contain the final metadata and screenshots. Regenerate the submission after any upstream source change. The prepared sibling metainfo under `release/` is for review; the build installs the committed upstream metadata.
 3. Install `flatpak`, `flatpak-builder` and `just`, and enable the Flathub source for the SDK, Rust SDK extension and COSMIC BaseApp. Fork and clone `pop-os/cosmic-flatpak`. Copy `release/store-submission/app/io.github.hasimzr.CepDesk/` to `app/io.github.hasimzr.CepDesk/` in the fork.

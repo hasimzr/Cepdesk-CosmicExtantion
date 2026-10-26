@@ -4,7 +4,8 @@ import argparse
 import json
 import pathlib
 import re
-import shutil
+import tomllib
+from urllib.parse import parse_qs, urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 root = pathlib.Path(__file__).resolve().parents[1]
@@ -32,8 +33,50 @@ for module in manifest['modules']:
     source['url'] = args.repository
     source['commit'] = args.commit.lower()
 (output / 'io.github.hasimzr.CepDesk.json').write_text(json.dumps(manifest, indent=2) + '\n')
-shutil.copy2(args.cargo_sources, output / 'cargo-sources.json')
-shutil.copy2(args.service_cargo_sources, output / 'service-cargo-sources.json')
+def copy_cargo_sources(source, destination, lockfile):
+    sources = json.loads(source.read_text())
+    for entry in sources:
+        if entry.get('type') != 'inline' or entry.get('dest-filename') not in ('config', 'config.toml'):
+            continue
+        config = tomllib.loads(entry['contents'])
+
+        def canonical(url):
+            parsed = urlsplit(url.removeprefix('git+'))
+            path = parsed.path.rstrip('/').removesuffix('.git')
+            if parsed.hostname == 'github.com':
+                path = path.lower()
+            return urlunsplit((parsed.scheme, parsed.netloc, path, '', ''))
+
+        def identity(table):
+            return (canonical(table['git']), *(table.get(key) for key in ('rev', 'tag', 'branch')))
+
+        configured = {identity(table) for table in config.get('source', {}).values() if 'git' in table}
+        lock = tomllib.loads(lockfile.read_text())
+        for package in lock['package']:
+            url = package.get('source', '')
+            if not url.startswith('git+'):
+                continue
+            parsed = urlsplit(url.removeprefix('git+'))
+            table = {'git': canonical(url), 'replace-with': 'vendored-sources'}
+            query = parse_qs(parsed.query)
+            for key in ('rev', 'tag', 'branch'):
+                if key in query:
+                    table[key] = query[key][0]
+            key = identity(table)
+            if key in configured:
+                continue
+            # The upstream generator keys by URL and can lose an unqualified
+            # source when the same repository also occurs with a pinned rev.
+            alias = url.split('#', 1)[0]
+            entry['contents'] += '\n[source.' + json.dumps(alias) + ']\n'
+            entry['contents'] += ''.join(f'{k} = {json.dumps(v)}\n' for k, v in table.items())
+            configured.add(key)
+        entry['dest-filename'] = 'config.toml'
+    destination.write_text(json.dumps(sources, indent=2) + '\n')
+
+
+copy_cargo_sources(args.cargo_sources, output / 'cargo-sources.json', root / 'Cargo.lock')
+copy_cargo_sources(args.service_cargo_sources, output / 'service-cargo-sources.json', root / 'service/Cargo.lock')
 # Metadata belongs upstream, not in the COSMIC submission. This prepared sibling
 # is reviewed before replacing upstream metadata and creating the final release.
 metadata = ET.parse(root / 'resources/io.github.hasimzr.CepDesk.metainfo.xml')
