@@ -1,0 +1,38 @@
+# Cargo outputs; commit both Cargo.lock files.
+/target/
+/service/target/
+/release/
+/.tools/
+/.flatpak-builder/
+/build-dir/
+/repo/
+
+# Python/editor and temporary test outputs.
+__pycache__/
+*.py[cod]
+*.log
+.test-state/
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Never commit runtime state or private/signing keys.
+/state/
+/test-state/
+password.json
+identity.json
+devices.json
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+password-*.tmp
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks

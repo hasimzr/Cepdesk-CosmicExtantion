@@ -1,88 +1,88 @@
-# CepDesk — COSMIC masaüstü eklentisi
+# CepDesk — COSMIC desktop applet
 
-Android telefon veya tabletinden COSMIC masaüstünü yerel ağ üzerinden yönet. Bu depo panel eklentisini, yönetim penceresini ve gerekli masaüstü servisini birlikte içerir.
+Control your COSMIC desktop from an Android phone or tablet over your local network. This repository includes the panel applet, management window, and required desktop service.
 
-[Web sitesi ve Android APK](https://cepdesk.hasimozer.com) · [Kurulum](docs/kurulum.md) · [Mağaza başvurusu](docs/cosmic-magaza.md) · [MIT lisansı](LICENSE)
+[Website and Android APK](https://cepdesk.hasimozer.com) · [Installation](docs/kurulum.md) · [Store submission](docs/cosmic-magaza.md) · [MIT license](LICENSE)
 
-## Kullanıcı kurulumu
+## User installation
 
-Siteden veya bu deponun GitHub Releases bölümünden masaüstü `.deb` paketini indirin. Pop!_OS 24.04 / COSMIC üzerinde indirdiğiniz dizinde:
+Download the desktop `.deb` package from the website or this repository's GitHub Releases section. On Pop!_OS 24.04 / COSMIC, run the following in the download directory:
 
 ```sh
 sudo apt install ./cepdesk_0.1.0_amd64.deb
 cepdesk-applet --settings
 ```
 
-Yönetim penceresinden ilk bağlantı parolasını belirleyin. Android APK'yi telefona kurun; aynı yerel ağda bilgisayarı seçerek eşleştirin. Panel eklentisini COSMIC Ayarları → Masaüstü → Panel üzerinden ekleyin. COSMIC Store yayını henüz tamamlanmamıştır.
+Set the initial connection password in the management window. Install the Android APK on your phone, then select your computer on the same local network to pair it. Add the panel applet through COSMIC Settings → Desktop → Panel. Publication in the COSMIC Store is not yet complete.
 
-## Depo düzeni
+## Repository layout
 
-- `src/`, `resources/`: COSMIC eklentisi, yönetim penceresi ve mağaza metadatası.
-- `service/`: telefon bağlantılarını ve masaüstü işlemlerini yürüten Rust servisi; gerekli bir bileşendir.
-- `packaging/`, `scripts/`, `tests/`, `docs/`: paketleme, derleme, test ve belgeler.
-- `release/`: yerel derleme çıktıları; Git'e eklenmez, dağıtım için GitHub Releases kullanılır.
+- `src/`, `resources/`: COSMIC applet, management window, and store metadata.
+- `service/`: the Rust service that handles phone connections and desktop operations; this is a required component.
+- `packaging/`, `scripts/`, `tests/`, `docs/`: packaging, builds, tests, and documentation.
+- `release/`: local build outputs; excluded from Git. Use GitHub Releases for distribution.
 
-Android ve web kaynakları bu depoya dahil değildir ve masaüstü derlemesi için gerekmez. `Cargo.lock` ve `service/Cargo.lock` kaynak depoda tutulmalıdır. Aşağıdaki yollar, klasörü hangi isimle klonladığınızdan bağımsızdır.
+Android and web sources are not included in this repository and are not required to build the desktop components. Keep `Cargo.lock` and `service/Cargo.lock` in the source repository. The paths below work regardless of the name of your cloned directory.
 
-## Masaüstü bileşenleri
+## Desktop components
 
-Yerel bilgisayar servisi için libcosmic tabanlı panel eklentisi ve ayrı yönetim penceresi. `cepdesk-applet` panelde, `cepdesk-applet --settings` normal pencerede çalışır. Panel eklentisi COSMIC'in eklenti listesine `X-CosmicApplet=true` ile katılır. Kaynaklar sabit libcosmic commit'i ve Cargo.lock ile kilitlenir; Rust 1.99 üzerinde derlenmiştir.
+A libcosmic-based panel applet and a separate management window for the local computer service. `cepdesk-applet` runs in the panel, while `cepdesk-applet --settings` opens a regular window. The panel applet registers in COSMIC's applet list with `X-CosmicApplet=true`. Dependencies are pinned through a fixed libcosmic commit and Cargo.lock; the project has been built with Rust 1.99.
 
-Servis bu projenin `service/` alt bileşenidir; ayrı bir ana proje değildir. `src/` eklenti ve yönetim arayüzünü, `service/src/` telefon bağlantılarını ve masaüstü işlemlerini içerir. `scripts/`, `packaging/`, `tests/`, `docs/` ve `release/` her iki parçaya birlikte aittir. Bu belgedeki komutlar bu masaüstü deposunun kökünden çalıştırılır; Cargo.toml ve service/ bu dizinde bulunur.
+The service is a subcomponent of this project under `service/`, rather than a separate top-level project. `src/` contains the applet and management interface; `service/src/` contains phone connection and desktop operation logic. `scripts/`, `packaging/`, `tests/`, `docs/`, and `release/` are shared by both components. Run the commands in this document from the root of this desktop repository, which contains Cargo.toml and service/.
 
-## Dil ve arayüz
+## Language and interface
 
-Panel açılır menüsü durum, hızlı servis kontrolleri ve ayarları gösterir. Ayrıntılı cihaz/komut/iş/API yönetimi **Yönetim merkezi** ile açılan ayrı pencerededir; seçili sayfa yan menüde vurgulanır ve başlık gezinme sırasında görünür kalır.
+The panel popup shows status, quick service controls, and settings. Detailed device, command, job, and API management is available in a separate window opened through **Management center**. The selected page is highlighted in the sidebar, and the heading remains visible while navigating.
 
-Arayüz Türkçe ve İngilizce destekler. İlk açılışta `LC_ALL`, `LC_MESSAGES`, ardından `LANG` önceliğiyle cihaz dili algılanır; Türkçe dışındaki diller için İngilizce kullanılır. **Ayarlar → Dil** bölümünden **Cihaz dilini kullan**, **Türkçe** veya **English** seçilebilir. Tercih `$XDG_CONFIG_HOME/cepdesk/applet-language` (varsayılan `~/.config/cepdesk/applet-language`) dosyasında saklanır; açık panel ve yönetim pencereleri bir sonraki yenilemede aynı tercihi kullanır. Flatpak sürümünde yapılandırma sandbox içindeki kullanıcı dizininde saklanır.
+The interface supports Turkish and English. On first launch, the system language is detected using `LC_ALL`, `LC_MESSAGES`, then `LANG`, in that order of precedence; English is used for languages other than Turkish. Under **Settings → Language**, select **Use device language**, **Türkçe**, or **English**. The preference is stored in `$XDG_CONFIG_HOME/cepdesk/applet-language` (default: `~/.config/cepdesk/applet-language`); open panel and management windows use the same preference on their next refresh. In the Flatpak version, configuration is stored in the user directory inside the sandbox.
 
-Durum ve Ayarlar sayfalarından [mobil uygulama ve proje sitesine](https://cepdesk.hasimozer.com) ve [geliştirici Haşim Özer’in GitHub profiline](https://github.com/hasimzr) erişilebilir. Bağlantılar masaüstü portalı üzerinden varsayılan tarayıcıda açılır.
+The Status and Settings pages provide links to the [mobile app and project website](https://cepdesk.hasimozer.com) and [developer Haşim Özer's GitHub profile](https://github.com/hasimzr). Links open in the default browser through the desktop portal.
 
-## Yönetim
+## Management
 
-- Durum: servis, kayıtlı/çevrimiçi cihaz sayısı, port, keşif, sertifika; başlat/durdur/yeniden başlat ve otomatik başlatma.
-- Cihazlar: gerçek kimliği doğrulanmış bağlantılar/IP, serbest komut izni, mevcut bağlantıyı kesme, kalıcı anahtar iptali.
-- Komutlar: tanım ekleme/güncelleme/silme ve kaydederek veya kaydetmeden çalıştırma.
-- İşler: tüm cihazların ve yerel yönetimin işleri, seçilen çıktı, terminal yanıtı, iptal ve geçmiş silme.
-- Ayarlar: ilk bağlantı parolası/değiştirme, pano takibi, geçici kodla eşleştirme/onay/red.
-- Servis API: pano/pencere/medya/sistem/komut çağrıları için yöntem + JSON. Örnekler ana protokol belgesinde. Monitör, uinput ve ses yayınının ağ oturumu yaşam döngüsü telefonda kalır.
+- Status: service state, registered/online device counts, port, discovery, and certificate; start/stop/restart and automatic startup.
+- Devices: authenticated connections/IP addresses, permission to run arbitrary commands, disconnecting the current connection, and permanent key revocation.
+- Commands: add/update/delete definitions and run commands with or without saving them.
+- Jobs: jobs from all devices and local management, selected output, terminal responses, cancellation, and history deletion.
+- Settings: set/change the initial connection password, clipboard monitoring, and pairing with a temporary code, including approval/rejection.
+- Service API: method + JSON for clipboard/window/media/system/command calls. Examples are in the main protocol document. The phone manages the network session lifecycle for monitor streaming, uinput, and audio streaming.
 
-Çevrimiçi gösterimi kayıtlı cihaz varlığına dayanmaz: auth sonrası oturum eklenir, bağlantı/kesme/hata sonrasında RAII ile kaldırılır. 15 saniyelik ping ve 90 saniyelik yanıtsızlık sınırı kopan ağları temizler. Bağlantıyı kesmek kalıcı engelleme değildir; telefon yeniden bağlanabilir. Yetki iptali cihazın anahtarını ve çalışan işlerini iptal eder.
+Online status is based on active sessions, rather than the presence of a registered device: a session is added after authentication and removed through RAII on disconnect or error. A 15-second ping interval and a 90-second timeout clean up lost network connections. Disconnecting a device does not permanently block it; the phone can reconnect. Revoking authorization revokes the device's key and cancels its running jobs.
 
-## Derleme ve kurulum
+## Build and installation
 
-Sistem bağımlılıkları (Pop!_OS/Ubuntu): Rust, pkg-config, C/C++ derleyici, cmake, libxkbcommon-dev, libfontconfig-dev, libfreetype-dev, libexpat1-dev, libwayland-dev, libegl-dev, libgles-dev, libgbm-dev. Sistemdeki Rust araç zinciri kullanılır. İsteğe bağlı `.tools` araçları varsa betikler bunları da kullanabilir; temiz klonda bu dizin gerekmez. Paketlemek için ayrıca `dpkg-deb`, metadata kontrolü için `appstreamcli` ve `desktop-file-validate` kullanılabilir.
+System dependencies (Pop!_OS/Ubuntu): Rust, pkg-config, a C/C++ compiler, cmake, libxkbcommon-dev, libfontconfig-dev, libfreetype-dev, libexpat1-dev, libwayland-dev, libegl-dev, libgles-dev, and libgbm-dev. The system Rust toolchain is used. Scripts can also use optional tools in `.tools` if present; this directory is not required in a clean clone. Packaging additionally requires `dpkg-deb`; `appstreamcli` and `desktop-file-validate` can be used to validate metadata.
 
-Bu deponun kökünden:
+From the root of this repository:
 
 ```sh
 ./scripts/build-cosmic-package.sh
 ```
 
-Paket: `release/cepdesk_0.1.0_amd64.deb` (bu makinede amd64). Servis ve eklenti aynı pakettedir. Pop!_OS 24.04 veya eşdeğer glibc 2.39+ hedeflenir. Dağıtım kurulumu:
+Package: `release/cepdesk_0.1.0_amd64.deb` (amd64 on this machine). The service and applet are included in the same package. The target is Pop!_OS 24.04 or an equivalent system with glibc 2.39+. Install the package with:
 
 ```sh
 sudo apt install ./release/cepdesk_0.1.0_amd64.deb
 cepdesk-applet --settings
 ```
 
-Paket kurulunca açık grafik kullanıcı oturumlarında servis otomatik başlar; sonraki grafik oturumlarında da başlatılır. Eklenti veya yönetim penceresi açıldığında otomatik başlatması açık olan servis bir kez başlatılır. Düzenli durum yenilemesi servisi yeniden başlatmaz; Durdur seçimi korunur. Otomatik başlatmayı kapat düğmesi kullanıcıya özel systemd maskesiyle paket varsayılanını geçersiz kılar; yeniden açmak maskeyi kaldırıp servisi başlatır. Paket kaldırılırken açık oturumlardaki servis durdurulur. Kullanıcı yapılandırması korunur.
+Installing the package automatically starts the service in active graphical user sessions; it also starts in subsequent graphical sessions. Opening the applet or management window starts the service once if automatic startup is enabled. Regular status refreshes do not restart the service, so choosing Stop remains effective. The button to disable automatic startup overrides the package default with a per-user systemd mask; enabling it again removes the mask and starts the service. Removing the package stops the service in active sessions. User configuration is preserved.
 
-İlk servisin sistemd altında terminal olmadan başlaması desteklenir. Parola henüz yokken telefonların parola eşleştirmesi reddedilir; yönetim penceresinden ilk parola belirlenir. Telefon/sunucu anahtarları ve mevcut veriler korunur.
+The service supports starting for the first time under systemd without a terminal. Until a password is set, password-based pairing from phones is rejected; set the initial password in the management window. Phone/server keys and existing data are preserved.
 
-Daha önce `scripts/install-desktop.sh` ile kullanıcı kurulumu yapıldıysa kullanıcı unit dosyası sistem paketinden önce gelir. Mevcut kullanıcı kurulumunu güncellemek için, kaynak kökünden `./scripts/install-cosmic-local.sh` çalıştırın. Betik servis/eklenti ikililerini kullanıcı dizinine kurar ve servisi yeniden başlatır.
+If you previously performed a user installation with `scripts/install-desktop.sh`, the user unit file takes precedence over the system package. To update an existing user installation, run `./scripts/install-cosmic-local.sh` from the source root. The script installs the service/applet binaries in the user directory and restarts the service.
 
-COSMIC Ayarları → Masaüstü → Panel → Eklentileri düzenle bölümünden CepDesk'i ekleyin. Etiketler COSMIC sürümüne göre değişebilir. Aynı eklenti birden fazla panele eklenebilir; yönetim penceresi ayrıca uygulama başlatıcısından açılır.
+Add CepDesk through COSMIC Settings → Desktop → Panel → Edit applets. Labels may vary by COSMIC version. The same applet can be added to multiple panels; the management window can also be opened from the application launcher.
 
-## Güven sınırı
+## Trust boundary
 
-Yönetim Unix soketi `$XDG_RUNTIME_DIR/cepdesk/admin.sock`, dizin 0700/soket 0600 ve peer UID kontrolüyle aynı kullanıcıya özeldir. Telefon anahtarları/parola hiçbir liste yanıtında verilmez. Parola yalnızca kullanıcı soketinden aktarılır, shell argümanı olarak taşınmaz. Servis işlemleri sabit `cepdesk.service` için kullanıcı systemd D-Bus çağrılarıdır; shell birleştirmesi kullanılmaz. Sudo komutları kullanıcının terminal oturumunda açıkça parola ister; root servis kurulmaz.
+The management Unix socket at `$XDG_RUNTIME_DIR/cepdesk/admin.sock` is restricted to the same user through directory permissions of 0700, socket permissions of 0600, and a peer UID check. Phone keys/passwords are never included in list responses. The password is passed only through the user socket, never as a shell argument. Service operations use user systemd D-Bus calls for the fixed `cepdesk.service` unit; no shell concatenation is used. Sudo commands explicitly prompt for a password in the user's terminal session; no root service is installed.
 
-## Mağaza
+## Store
 
-[Mağaza hazırlığı ve yayımlama adımları](docs/cosmic-magaza.md). Flatpak şablonu servis ve eklentiyi birlikte içerir. İlk eklenti/yönetim penceresi açılışında paket içindeki host servisi kullanıcı systemd servisi olarak hazırlanıp başlatılır; ayrı `.deb` kurulumu gerekmez. Bu akış `org.freedesktop.Flatpak` host çalıştırma izni kullanır. `.deb` sürümü de her ikisini birlikte içerir. Kaynak deposu, ekran görüntüleri ve gerçek Flatpak build doğrulaması tamamlanmadan mağazaya hazır olarak işaretlenmez.
+[Store preparation and publishing steps](docs/cosmic-magaza.md). The Flatpak template includes both the service and applet. When the applet/management window is first opened, the bundled host service is set up and started as a user systemd service; a separate `.deb` installation is not required. This flow uses the `org.freedesktop.Flatpak` permission to run commands on the host. The `.deb` version also includes both components. The project will not be marked as store-ready until the source repository, screenshots, and actual Flatpak build validation are complete.
 
-## Geliştirme kontrolleri
+## Development checks
 
 ```sh
 cargo build --locked --release --manifest-path service/Cargo.toml
@@ -90,11 +90,11 @@ cargo build --locked --release
 bash scripts/check.sh
 ```
 
-`check.sh` her iki Rust paketinin format, clippy ve testlerini; Python paketleme testlerini ve kuruluysa AppStream/desktop dosyası doğrulamasını çalıştırır. D-Bus testleri için `dbus-run-session` gerekir. Gerçek COSMIC oturumu gerektiren test ayrıca `bash scripts/verify-session.sh` ile çalıştırılır; pano ve pencere işlemleri yapar.
+`check.sh` runs formatting checks, clippy, and tests for both Rust packages; Python packaging tests; and AppStream/desktop file validation if the required tools are installed. D-Bus tests require `dbus-run-session`. Tests that require an actual COSMIC session are run separately with `bash scripts/verify-session.sh`; these perform clipboard and window operations.
 
-Touchpad/klavye için kullanıcı tarafından bir kez `sudo ./scripts/setup-input.sh` çalıştırılması gerekir. H.264 görüntü için `ffmpeg`/libx264, ses için PulseAudio araçları ve Wi-Fi için NetworkManager gerekebilir. Bu host gereksinimleri Flatpak kurulumuyla kendiliğinden sağlanmaz.
+For touchpad/keyboard support, the user must run `sudo ./scripts/setup-input.sh` once. H.264 video may require `ffmpeg`/libx264, audio may require PulseAudio tools, and Wi-Fi may require NetworkManager. Installing the Flatpak does not automatically provide these host dependencies.
 
-## GitHub'a aktarım
+## Publishing to GitHub
 
-Bu klasörün **içeriğini** depo köküne yerleştirin: `Cargo.toml`, `service/`, `scripts/`, `resources/`, `README.md`, `LICENSE` ve `.gitignore` kökte görünmelidir. `.gitignore` derleme çıktıları, yerel araçlar ve yaygın anahtar/test dosyalarını dışarıda tutar; `git add` öncesinde `git status --short` ve staged değişikliklerini inceleyin. Parola, sertifika özel anahtarı veya cihaz durumlarını kaynak klasörüne kopyalamayın. Paketleri GitHub Releases'a yükleyin. Mağaza manifesti bu bağımsız depo düzeninden derlenir.
+Place the **contents** of this directory at the repository root: `Cargo.toml`, `service/`, `scripts/`, `resources/`, `README.md`, `LICENSE`, and `.gitignore` should appear at the root. `.gitignore` excludes build outputs, local tools, and common key/test files; review `git status --short` and staged changes before running `git add`. Do not copy passwords, certificate private keys, or device state into the source directory. Upload packages to GitHub Releases. The store manifest builds from this standalone repository layout.
 # Depdesk-CosmicExtantion
