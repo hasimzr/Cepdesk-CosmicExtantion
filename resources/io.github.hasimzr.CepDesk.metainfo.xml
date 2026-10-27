@@ -5,11 +5,14 @@
   <project_license>MIT</project_license>
   <name>CepDesk</name>
   <developer id="io.github.hasimzr"><name>Haşim Özer</name></developer>
-  <summary>Manage phone connections and your desktop service</summary>
+  <summary>Connect your Android device to the COSMIC desktop</summary>
   <summary xml:lang="tr">Telefon bağlantılarını ve bilgisayar servisini yönet</summary>
   <description>
     <p>CepDesk is a panel applet and management application for the COSMIC desktop. It controls the native CepDesk service that connects Android devices to your computer over the local network.</p>
     <p>The Flatpak edition includes the desktop service and prepares it automatically on first launch. It runs on the host as your user to control desktop applications and commands, using the org.freedesktop.Flatpak permission. Set a pairing password and connect the Android app to begin. The interface supports Turkish and English, follows your device language automatically and offers a language selector in Settings.</p>
+    <p>Use the Android companion app to access desktop windows, launch applications, share your clipboard, control media and system settings, run commands, and use your phone as a touchpad or keyboard over your local network.</p>
+    <p>The Android app is required for phone controls and is installed separately. Download a ready-to-install APK using the project website link. The COSMIC Store package includes the desktop components, not the Android APK.</p>
+    <p>To inspect the Android source code or build your own APK, use the contribution link to open the Android repository and follow its README. The desktop repository README also links to the mobile source.</p>
     <ul>
       <li>View authenticated devices, live connections and command permissions.</li>
       <li>Disconnect or revoke devices and approve pairing requests.</li>
@@ -21,10 +24,29 @@
   <url type="homepage">https://cepdesk.hasimozer.com</url>
   <url type="vcs-browser">https://github.com/hasimzr/Cepdesk-CosmicExtantion</url>
   <url type="bugtracker">https://github.com/hasimzr/Cepdesk-CosmicExtantion/issues</url>
+  <url type="contribute">https://github.com/hasimzr/CepdeskMobilApp</url>
   <url type="contact">https://github.com/hasimzr</url>
   <launchable type="desktop-id">io.github.hasimzr.CepDesk.Manager.desktop</launchable>
   <icon type="stock">io.github.hasimzr.CepDesk</icon>
   <provides><id>com.system76.CosmicApplet</id><binary>cepdesk-applet</binary></provides>
+  <screenshots>
+    <screenshot type="default">
+      <caption>COSMIC management overview with service and startup controls; certificate redacted</caption>
+      <image type="source" width="1410" height="1116">https://raw.githubusercontent.com/hasimzr/Cepdesk-CosmicExtantion/main/resources/screenshots/desktop-overview.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Manage device permissions and revoke access; device identifiers redacted</caption>
+      <image type="source" width="1410" height="1116">https://raw.githubusercontent.com/hasimzr/Cepdesk-CosmicExtantion/main/resources/screenshots/desktop-devices.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Configure a connection password, clipboard tracking and temporary pairing codes</caption>
+      <image type="source" width="1222" height="967">https://raw.githubusercontent.com/hasimzr/Cepdesk-CosmicExtantion/main/resources/screenshots/desktop-settings.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Separate Android companion app: commands and system controls; English localization, titles redacted</caption>
+      <image type="source" width="1586" height="992">https://raw.githubusercontent.com/hasimzr/Cepdesk-CosmicExtantion/main/resources/screenshots/android-controls.png</image>
+    </screenshot>
+  </screenshots>
   <categories><category>Utility</category></categories>
   <supports><control>keyboard</control><control>pointing</control><control>touch</control></supports>
   <content_rating type="oars-1.1" />

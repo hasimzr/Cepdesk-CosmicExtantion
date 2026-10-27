@@ -3,11 +3,18 @@
 CepDesk connects Android phones and tablets to a COSMIC desktop over the local network. This submission includes the panel applet, a separate management window and the required desktop service, built from the same pinned source commit.
 
 - Upstream: https://github.com/hasimzr/Cepdesk-CosmicExtantion
-- Website / Android APK: https://cepdesk.hasimozer.com
+- Website / ready-to-install Android APK: https://cepdesk.hasimozer.com
+- Android source and APK build instructions: https://github.com/hasimzr/CepdeskMobilApp
 - License: MIT
 - Languages: English and Turkish, with system-language detection and a language selector.
 
 The management window supports pairing, authenticated device connections and permissions, saved commands, job output/cancellation and service controls. The Android app exposes clipboard, windows, launcher, media, system controls, remote input and screen sharing.
+
+## Android companion and screenshots
+
+The Android companion app is required for phone controls and is installed separately. Users who want a ready-to-install APK can download it from https://cepdesk.hasimozer.com. Users who want to inspect the mobile code or build it themselves can follow the README at https://github.com/hasimzr/CepdeskMobilApp.
+
+The first three store images show the COSMIC desktop application. The final image shows the separately installed Android companion app. Captions and promotional copy are in English. Certificate and device identifiers are redacted; the mobile illustration has been localized into English and private window titles have been redacted. Original screenshots containing personal data are not included in this repository.
 
 ## Host service and permissions
 

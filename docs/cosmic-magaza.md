@@ -5,7 +5,8 @@ CepDesk is submitted as a source-built Flatpak to [pop-os/cosmic-flatpak](https:
 ## Upstream and application identity
 
 - Source: https://github.com/hasimzr/Cepdesk-CosmicExtantion
-- Website and Android download: https://cepdesk.hasimozer.com
+- Website and ready-to-install Android APK: https://cepdesk.hasimozer.com
+- Android source and build instructions: https://github.com/hasimzr/CepdeskMobilApp
 - Store application ID: `io.github.hasimzr.CepDesk`
 - License: MIT; AppStream metadata: CC0-1.0.
 - Runtime and SDK: Freedesktop 25.08, matching the stable COSMIC BaseApp available on Flathub.
@@ -32,7 +33,7 @@ Before uninstalling, stop the service and disable automatic startup in the manag
 
 ## Prepare and test
 
-1. Add real screenshots of the panel popup and management window under `resources/screenshots/`. Avoid passwords, device keys and private device/IP details. Add public HTTPS image URLs and captions to the upstream AppStream metadata. Commit and push these together with the packaging changes.
+1. Review the prepared images under `resources/screenshots/` and their privacy notes. The gallery includes desktop management screenshots and one separately labeled Android companion illustration, with English captions. Sensitive identifiers are redacted and the Android illustration is localized into English. AppStream image URLs target the upstream `main` branch; publish these files there (or update the URLs for the final public ref) and verify that every URL resolves before submission. Commit and push the images together with the packaging changes. Do not publish the private originals.
 2. Obtain [flatpak-cargo-generator.py](https://github.com/flatpak/flatpak-builder-tools/tree/master/cargo) from the official Flatpak tools repository. Use Python 3.11 or later and install the generator's declared dependencies in a virtual environment. Generate both source lists from the final lockfiles:
 
    ```sh

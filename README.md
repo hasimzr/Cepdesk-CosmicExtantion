@@ -2,7 +2,27 @@
 
 Control your COSMIC desktop from an Android phone or tablet over your local network. This repository includes the panel applet, management window, and required desktop service.
 
-[Website and Android APK](https://cepdesk.hasimozer.com) · [Installation](docs/kurulum.md) · [Store submission](docs/cosmic-magaza.md) · [MIT license](LICENSE)
+[Download the Android app](https://cepdesk.hasimozer.com) · [Android source and build instructions](https://github.com/hasimzr/CepdeskMobilApp) · [Installation](docs/kurulum.md) · [Store submission](docs/cosmic-magaza.md) · [MIT license](LICENSE)
+
+## Connect your phone to COSMIC
+
+Use CepDesk on Android to access desktop windows, launch applications, share your clipboard, control media and system settings, run commands, and use your phone as a touchpad or keyboard over your local network.
+
+**Want to get started without building anything?** Download the Android APK from [cepdesk.hasimozer.com](https://cepdesk.hasimozer.com). The Android companion app is installed separately; it is not included in the COSMIC Store package.
+
+**Want to inspect the mobile app or build your own APK?** Visit [CepdeskMobilApp on GitHub](https://github.com/hasimzr/CepdeskMobilApp). Its README covers dependencies, development, and standalone APK builds.
+
+### Screenshots
+
+![COSMIC desktop management overview; certificate fingerprint redacted](resources/screenshots/desktop-overview.png)
+
+![COSMIC device permissions; device names and identifiers redacted](resources/screenshots/desktop-devices.png)
+
+![COSMIC password and pairing settings](resources/screenshots/desktop-settings.png)
+
+![Separately installed Android companion app: commands and system controls; localized into English and window titles redacted](resources/screenshots/android-controls.png)
+
+The desktop screenshots show the COSMIC package. The Android screenshot shows the separately installed companion app. Identifying details are redacted; the Android illustration has been localized into English. See [screenshot notes](resources/screenshots/README.md).
 
 ## User installation
 
